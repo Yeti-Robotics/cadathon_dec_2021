@@ -1,0 +1,11 @@
+We were going to use this a little bit to visualize + determine some values to use for shooting in autonomous but didn't. 
+
+So this is unfinished and not all that great but I felt like including it anyway? To show what we tried or something...
+
+You'll need to install tkinter (pip install tk) if you feel like running it. 
+
+You can move the robot with the arrow keys, lock a trajectory with mouse1, and change velocity with the scroll wheel. 
+
+The two lines shown are the borders between goalie/color and white zone/color. 
+
+:0 :)
