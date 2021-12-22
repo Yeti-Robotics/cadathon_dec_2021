@@ -7,11 +7,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.DriveCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.IntakeInCommand;
+import frc.robot.commands.IntakeOutCommand;
+import frc.robot.commands.PivotIntakeDownCommand;
+import frc.robot.commands.PivotIntakeUpCommand;
+import frc.robot.commands.ToggleShifterCommand;
+import frc.robot.commands.ToggleShooterCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.GearShifterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,12 +29,15 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public Joystick driverStationJoystick;
+  public Joystick driverStation;
   public DrivetrainSubsystem drivetrainSubsystem;
+  public GearShifterSubsystem gearShifterSubsystem;
+  public ShooterSubsystem shooterSubsystem;
+  public IntakeSubsystem intakeSubsystem;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    driverStationJoystick = new Joystick(0);
+    driverStation = new Joystick(0);
     drivetrainSubsystem = new DrivetrainSubsystem();
 
     configureButtonBindings();
@@ -41,13 +51,28 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton button1 = new JoystickButton(driverStation, 1);
+    button1.whenPressed(new ToggleShifterCommand(gearShifterSubsystem));
+
+    JoystickButton button2 = new JoystickButton(driverStation, 2);
+    button2.whenPressed(new ToggleShooterCommand(shooterSubsystem));
+
+    JoystickButton button3 = new JoystickButton(driverStation, 3);
+    button3.whenPressed(new IntakeInCommand(intakeSubsystem));
+    JoystickButton button4 = new JoystickButton(driverStation, 4);
+    button4.whenPressed(new IntakeOutCommand(intakeSubsystem));
+    JoystickButton button5 = new JoystickButton(driverStation, 5);
+    button5.whileActiveContinuous(new PivotIntakeUpCommand(intakeSubsystem));
+    JoystickButton button6 = new JoystickButton(driverStation, 6);
+    button6.whileActiveContinuous(new PivotIntakeDownCommand(intakeSubsystem));
+  }
 
   public double getLeftY() {
-    return driverStationJoystick.getRawAxis(0);
+    return -driverStation.getRawAxis(0);
   }
   public double getRightY() {
-    return driverStationJoystick.getRawAxis(2);
+    return -driverStation.getRawAxis(2);
   }
 
   /**
