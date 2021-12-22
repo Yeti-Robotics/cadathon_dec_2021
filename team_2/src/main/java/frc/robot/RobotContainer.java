@@ -9,6 +9,7 @@ import javax.swing.Spring;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.autoRoutines.ShootAndDriveForwardCommandGroup;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.intake.CenterPieceCommand;
 import frc.robot.commands.intake.CloseClawCommand;
@@ -42,6 +43,7 @@ public class RobotContainer {
   public PivotSubsystem pivotSubsystem;
   public ShiftingGearsSubsystem shiftingGearsSubsystem;
   public SpringShootSubsystem springShootSubsystem;
+
   // The robot's subsystems and commands are defined here...
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -128,13 +130,8 @@ public class RobotContainer {
   private void setJoystickButtonWhileHeld(Joystick joystick, int button, CommandBase command) {
     new JoystickButton(joystick, button).whileHeld(command);
   }
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
    
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  } */
+     return new ShootAndDriveForwardCommandGroup(drivetrainSubsystem, intakeSubsystem);
+  }
 }

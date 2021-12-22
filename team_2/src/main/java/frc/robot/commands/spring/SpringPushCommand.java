@@ -1,10 +1,11 @@
 package frc.robot.commands.spring;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.SpringShootSubsystem;
 
-public class SpringPushCommand extends CommandBase {
+public class SpringPushCommand extends SequentialCommandGroup {
 
     private final SpringShootSubsystem springShootSubsystem;
 

@@ -38,10 +38,10 @@ public final class Constants {
 
     public static final class IntakeConstants {
 
-        public static final int INTAKE_FALCON = 1; //placeholder values
-        public static final int CENTERING_FALCON = 3;
+        public static final int INTAKE_FALCON = 7; //placeholder values
+        public static final int CENTERING_FALCON = 8;
 
-        public static final int[] SOLENOID_CLAW = {0, 1}; //placeholder
+        public static final int[] SOLENOID_CLAW = {2, 3}; //placeholder
 
         public static final double INTAKE_SPEED = 1.0;
         public static final double REVERSE_INTAKE_SPEED = -1.0;
@@ -51,8 +51,8 @@ public final class Constants {
 
     public static final class PivotConstants {
 
-        public static final int PIVOT_FALCON_1 = 1;
-        public static final int PIVOT_FALCON_2 = 2;
+        public static final int PIVOT_FALCON_1 = 9;
+        public static final int PIVOT_FALCON_2 = 10;
 
         public static final double SPIN_FORWARD_SPEED = 1.0;
         public static final double SPIN_BACKWARD_SPEED = -1.0;
@@ -61,7 +61,7 @@ public final class Constants {
 
     public static final class SpringConstants {
         
-        public static final int SPRING_MOTOR_PORT = 1; //placeholder
+        public static final int SPRING_MOTOR_PORT = 11; //placeholder
 
         public static final double SHOOT_SPEED = 1.0;
         public static final double RETRACT_SPEED = -1.0;
