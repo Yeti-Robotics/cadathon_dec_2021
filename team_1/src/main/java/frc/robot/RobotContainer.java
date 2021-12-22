@@ -9,8 +9,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.claw.MoveClawCommand;
+import frc.robot.commands.claw.ShootClawCommand;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
@@ -23,11 +27,15 @@ public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
 	public Joystick driverJoystick;
 	public DrivetrainSubsystem drivetrainSubsystem;
+	public ClawSubsystem clawSubsystem;
 
 	/** The container for the robot. Contains subsystems, OI devices, and commands. */
 	public RobotContainer() {
 		driverJoystick = new Joystick(OIConstants.DRIVER_JOYSTICK_PORT);
 		drivetrainSubsystem = new DrivetrainSubsystem();
+		clawSubsystem = new ClawSubsystem();
+
+		drivetrainSubsystem.setDefaultCommand(new RunCommand(() -> drivetrainSubsystem.tankDrive(getLeftY(), getRightY()), drivetrainSubsystem));
 
 		// Configure the button bindings
 		configureButtonBindings();
@@ -39,7 +47,10 @@ public class RobotContainer {
  	* edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
  	* edu.wpi.first.wpilibj2.command.button.JoystickButton}.
  	*/
-	private void configureButtonBindings() {}
+	private void configureButtonBindings() {
+		setJoystickButtonWhenPressed(driverJoystick, 1, new MoveClawCommand(clawSubsystem));
+		setJoystickButtonWhenPressed(driverJoystick, 2, new ShootClawCommand(clawSubsystem));
+	}
 
 	public double getLeftY() {
         return -driverJoystick.getRawAxis(0);

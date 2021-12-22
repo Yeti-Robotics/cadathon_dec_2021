@@ -7,12 +7,14 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DrivetrainConstants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 	public WPI_TalonFX rightMotor1, rightMotor2, rightMotor3;
 	public WPI_TalonFX leftMotor1, leftMotor2, leftMotor3;
+	public DifferentialDrive dDrive;
 
   	/** Creates a new DrivetrainSubsystem. */
 	public DrivetrainSubsystem() {
@@ -23,6 +25,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		leftMotor1 = new WPI_TalonFX(DrivetrainConstants.LEFT_MOTOR_PORT1);
 		leftMotor2 = new WPI_TalonFX(DrivetrainConstants.LEFT_MOTOR_PORT2);
 		leftMotor3 = new WPI_TalonFX(DrivetrainConstants.LEFT_MOTOR_PORT3);
+
+		dDrive = new DifferentialDrive(leftMotor1, rightMotor1);
 
 		rightMotor1.setInverted(true);
 		rightMotor2.follow(rightMotor1);
@@ -36,9 +40,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		leftMotor3.setInverted(InvertType.FollowMaster);
 	}
 
-	public void drive(double leftPow, double rightPow) {
-		leftMotor1.set(leftPow);
-		rightMotor1.set(rightPow);
+	public void tankDrive(double leftPow, double rightPow) {
+		dDrive.tankDrive(leftPow, rightPow);
 	}
 
 	public void stop() {

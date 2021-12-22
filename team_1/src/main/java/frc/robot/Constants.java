@@ -21,7 +21,12 @@ public final class Constants {
 		public static int LEFT_MOTOR_PORT1 = 3;
 		public static int LEFT_MOTOR_PORT2 = 4;
 		public static int LEFT_MOTOR_PORT3 = 5;
-	};
+	}
+
+	public static final class IntakeConstants {
+		public static int[] CLAW_MOVER = {6, 7};
+		public static int[] CLAW_SHOOTER = {8, 9};
+	}
 
 	public static final class OIConstants {
 		public static final int DRIVER_JOYSTICK_PORT = 0;
