@@ -9,13 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
-    private Command m_autonomousCommand;
-
-    private RobotContainer m_robotContainer;
+    private Command autonomousCommand;
+    private RobotContainer robotContainer;
 
     @Override
     public void robotInit() {
-        m_robotContainer = new RobotContainer();
+        robotContainer = new RobotContainer();
     }
 
     @Override
@@ -27,14 +26,17 @@ public class Robot extends TimedRobot {
     public void disabledInit() {}
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+        // put here so encoders are properly reset for both competition matches or when testing auto
+        // and for just testing tele-op without enabling autonomous
+        robotContainer.resetRobot();
+    }
 
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
+        autonomousCommand = robotContainer.getAutonomousCommand();
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
         }
     }
 
@@ -43,8 +45,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
         }
     }
 

@@ -6,10 +6,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -22,6 +22,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private WPI_TalonFX rightFalcon2;
     private WPI_TalonFX rightFalcon3;
 
+    private SpeedControllerGroup leftFalcons;
+    private SpeedControllerGroup rightFalcons;
     private DifferentialDrive diffDrive;
 
     public enum DriveMode {
@@ -40,25 +42,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rightFalcon2 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_2);
         rightFalcon3 = new WPI_TalonFX(DriveConstants.RIGHT_FALCON_3);
 
-        // have motors follow first motor on either side
-        leftFalcon2.follow(leftFalcon1);
-        leftFalcon3.follow(leftFalcon1);
-        leftFalcon2.setInverted(InvertType.FollowMaster); // prevents fighting from inversions
-        leftFalcon3.setInverted(InvertType.FollowMaster);
+        // group left & right sides for the DifferentialDrive object
+        leftFalcons = new SpeedControllerGroup(leftFalcon1, leftFalcon2, leftFalcon3);
+        rightFalcons = new SpeedControllerGroup(rightFalcon1, rightFalcon2, rightFalcon3);
 
-        rightFalcon2.follow(rightFalcon1);
-        rightFalcon3.follow(rightFalcon1);
-        rightFalcon2.setInverted(InvertType.FollowMaster);
-        rightFalcon3.setInverted(InvertType.FollowMaster);
+        // wraps all 6 motors into a single object (more manageable)
+        diffDrive = new DifferentialDrive(leftFalcons, rightFalcons);
+        diffDrive.setDeadband(DriveConstants.DEADBAND); // ignores tiny movements or drift in joysticks
 
-        diffDrive = new DifferentialDrive(leftFalcon1, rightFalcon1);
-        diffDrive.setDeadband(DriveConstants.DEADBAND); // ignores tiny movements in joysticks
-
+        // configure encoders (integrated bc falcons of course)
         leftFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         rightFalcon1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
 
+        // set all motors to brake mode (as opposed to coast) to prevent rolling
         leftFalcon1.setNeutralMode(NeutralMode.Brake);
+        leftFalcon2.setNeutralMode(NeutralMode.Brake);
+        leftFalcon3.setNeutralMode(NeutralMode.Brake);
         rightFalcon1.setNeutralMode(NeutralMode.Brake);
+        rightFalcon2.setNeutralMode(NeutralMode.Brake);
+        rightFalcon3.setNeutralMode(NeutralMode.Brake);
         
         resetEncoders();
 
@@ -99,9 +101,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return (getLeftEncoder() + getRightEncoder()) / 2.0;
     }
 
-    private void resetEncoders(){
-        leftFalcon1.setSelectedSensorPosition(0);
-        rightFalcon1.setSelectedSensorPosition(0);
+    public void resetEncoders(){
+        leftFalcon1.setSelectedSensorPosition(0.0);
+        rightFalcon1.setSelectedSensorPosition(0.0);
     }
 
     public DriveMode getDriveMode(){
